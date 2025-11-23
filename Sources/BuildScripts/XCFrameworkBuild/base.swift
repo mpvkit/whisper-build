@@ -830,6 +830,7 @@ class CombineBaseBuild : BaseBuild {
         }
 
         print("Create combine static libraries...")
+        let thinLibPath = thinDir(platform: platform, arch: arch) + ["lib"]
         var combinedLibName = combineFrameworkName()
         if !combinedLibName.hasSuffix(".a") {
             combinedLibName += ".a"
@@ -859,15 +860,17 @@ class CombineBaseBuild : BaseBuild {
         }
         try Utility.launch(path: "/usr/bin/libtool", arguments: arguments)
 
-        // delete old static libraries
+        // move old static libraries to origin directory
+        let backupDirectory = thinLibPath + ["bak"]
+        try? FileManager.default.createDirectory(at: backupDirectory, withIntermediateDirectories: true, attributes: nil)
         for framework in frameworks {
             let libname = framework.hasPrefix("lib") || framework.hasPrefix("Lib") ? framework : "lib" + framework
             let libPath = prefix + ["lib", libname]
-            try? FileManager.default.removeItem(at: libPath)
+            let backupLibPath = backupDirectory + [libname]
+            try? FileManager.default.moveItem(at: libPath, to: backupLibPath)
         }
 
         // create combine pkgconfig
-        let thinLibPath = thinDir(platform: platform, arch: arch) + ["lib"]
         let pkgconfigPath = thinLibPath + ["pkgconfig", "\(library.rawValue).pc"]
         if !FileManager.default.fileExists(atPath: pkgconfigPath.path) {
             throw NSError(domain: "no pkgconfig \(pkgconfigPath.path) for \(platform.rawValue) \(arch.rawValue)", code: 1)
@@ -881,10 +884,8 @@ class CombineBaseBuild : BaseBuild {
             options: .regularExpression
         )
 
-        // move old pkgconfig to pkgconfig_origin directory
-        let backupPkgconfigDirectory = thinLibPath + ["pkgconfig_origin"]
-        try? FileManager.default.createDirectory(at: backupPkgconfigDirectory, withIntermediateDirectories: true, attributes: nil)
-        let backupPkgconfigPath = backupPkgconfigDirectory + [pkgconfigPath.lastPathComponent]
+        // move old pkgconfig to origin directory
+        let backupPkgconfigPath = backupDirectory + [pkgconfigPath.lastPathComponent]
         try? FileManager.default.moveItem(at: pkgconfigPath, to: backupPkgconfigPath)
 
         // replace with combined pkgconfig

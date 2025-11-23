@@ -59,6 +59,29 @@ private class BuildWhisper: CombineBaseBuild {
         }
     }
 
+    override func build(platform: PlatformType, arch: ArchType) throws {
+        try super.build(platform: platform, arch: arch)
+
+        let frameworks = ["Foundation", "Metal", "Accelerate", "CoreML"]
+        let libframework = frameworks.map {
+            "-framework \($0)"
+        }.joined(separator: " ")
+
+        // Append the string "libframework" to the end of the Libs line.
+        let thinLibPath = thinDir(platform: platform, arch: arch) + ["lib"]
+        let pkgconfigPath = thinLibPath + ["pkgconfig", "\(library.rawValue).pc"]
+        var pkgconfigContent = try String(contentsOf: pkgconfigPath)
+        var arr = pkgconfigContent.components(separatedBy: "\n")
+        for (index, line) in arr.enumerated() {
+            if line.starts(with: "Libs:") {
+                arr[index] = line + " " + libframework
+                break
+            }
+        }
+        pkgconfigContent = arr.joined(separator: "\n")
+        try pkgconfigContent.write(to: pkgconfigPath, atomically: true, encoding: .utf8)
+    }
+
     override func frameworks() throws -> [String] {
         ["libwhisper-combined"]
     }

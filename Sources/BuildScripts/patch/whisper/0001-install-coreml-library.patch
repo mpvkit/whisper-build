@@ -1,0 +1,17 @@
+diff --git forkSrcPrefix/src/CMakeLists.txt forkDstPrefix/src/CMakeLists.txt
+index 2eae0c66c78f36354f9620dc3416fa62298f7d6d..d343cd432591b0ed69863178ab1edf806cfce4ca 100644
+--- forkSrcPrefix/src/CMakeLists.txt
++++ forkDstPrefix/src/CMakeLists.txt
+@@ -79,6 +79,12 @@ if (WHISPER_COREML)
+         )
+ 
+     set_target_properties(${TARGET} PROPERTIES FOLDER "libs")
++
++    install(TARGETS ${TARGET}
++        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++    )
+ endif()
+ 
+ if (WHISPER_OPENVINO)
