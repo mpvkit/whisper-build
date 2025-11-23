@@ -880,11 +880,15 @@ class CombineBaseBuild : BaseBuild {
             with: "-L${libdir} -l\(combinedLibname)",
             options: .regularExpression
         )
-        let combinePkgconfigPath = thinLibPath + ["pkgconfig", "\(library.rawValue)-combined.pc"]
-        FileManager.default.createFile(atPath: combinePkgconfigPath.path, contents: content.data(using: .utf8), attributes: nil)
 
-        // delete old pkgconfig
-        try? FileManager.default.removeItem(at: pkgconfigPath)
+        // move old pkgconfig to pkgconfig_origin directory
+        let backupPkgconfigDirectory = thinLibPath + ["pkgconfig_origin"]
+        try? FileManager.default.createDirectory(at: backupPkgconfigDirectory, withIntermediateDirectories: true, attributes: nil)
+        let backupPkgconfigPath = backupPkgconfigDirectory + [pkgconfigPath.lastPathComponent]
+        try? FileManager.default.moveItem(at: pkgconfigPath, to: backupPkgconfigPath)
+
+        // replace with combined pkgconfig
+        FileManager.default.createFile(atPath: pkgconfigPath.path, contents: content.data(using: .utf8), attributes: nil)
     }
 
 }
