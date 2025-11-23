@@ -17,7 +17,13 @@ let package = Package(
         .target(
             name: "_whisper",
             dependencies: ["Libwhisper-combined"],
-            path: "Sources/_Dummy"
+            path: "Sources/_Dummy",
+            linkerSettings: [
+                .linkedFramework("Foundation"),
+                .linkedFramework("Metal"),
+                .linkedFramework("Accelerate"),
+                .linkedFramework("CoreML"),
+            ]
         ),
         //AUTO_GENERATE_TARGETS_BEGIN//
         //AUTO_GENERATE_TARGETS_END//
