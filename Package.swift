@@ -17,14 +17,20 @@ let package = Package(
         .target(
             name: "_whisper",
             dependencies: ["Libwhisper-combined"],
-            path: "Sources/_Dummy"
+            path: "Sources/_Dummy",
+            linkerSettings: [
+                .linkedFramework("Foundation"),
+                .linkedFramework("Metal"),
+                .linkedFramework("Accelerate"),
+                .linkedFramework("CoreML"),
+            ]
         ),
         //AUTO_GENERATE_TARGETS_BEGIN//
 
         .binaryTarget(
             name: "Libwhisper-combined",
             url: "https://github.com/mpvkit/whisper-build/releases/download/1.8.2/Libwhisper-combined.xcframework.zip",
-            checksum: "1126055d2d494e3763290ec7c09c924823511269dd86877764b0a1b5520160d0"
+            checksum: "70ab3a5d6fa051ffab2aa7c434ee6834cf9fa9133657902afc0e7925ac8a712d"
         ),
         //AUTO_GENERATE_TARGETS_END//
     ]
