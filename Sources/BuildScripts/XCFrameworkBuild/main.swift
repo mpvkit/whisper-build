@@ -35,7 +35,7 @@ enum Library: String, CaseIterable {
         case .whisper:
             return  [
                 .target(
-                    name: "Libwhisper",
+                    name: "Libwhisper-combined",
                     url: "https://github.com/mpvkit/whisper-build/releases/download/\(BaseBuild.options.releaseVersion)/Libwhisper-combined.xcframework.zip",
                     checksum: "https://github.com/mpvkit/whisper-build/releases/download/\(BaseBuild.options.releaseVersion)/Libwhisper-combined.xcframework.checksum.txt"
                 ),

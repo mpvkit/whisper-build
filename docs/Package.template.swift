@@ -16,7 +16,7 @@ let package = Package(
         // https://github.com/apple/swift-package-manager/issues/6069
         .target(
             name: "_whisper",
-            dependencies: ["Libwhisper"],
+            dependencies: ["Libwhisper-combined"],
             path: "Sources/_Dummy"
         ),
         //AUTO_GENERATE_TARGETS_BEGIN//

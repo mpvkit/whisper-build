@@ -19,7 +19,7 @@ enum Build {
         if !FileManager.default.fileExists(atPath: path.path) {
             try? FileManager.default.createDirectory(at: path, withIntermediateDirectories: false, attributes: nil)
         }
-        try? FileManager.default.removeItem(atPath: (URL.currentDirectory + "dist/release/Package.swift").path)
+        try? Utility.removeFiles(extensions: [".swift"], currentDirectoryURL: URL.currentDirectory + ["dist", "release"])
         FileManager.default.changeCurrentDirectoryPath(path.path)
         BaseBuild.options = options
         if !options.platforms.isEmpty {
@@ -745,9 +745,6 @@ class BaseBuild {
         } else {
             for target in library.targets {
                 let checksumFile = releaseDirPath + [target.name + ".xcframework.checksum.txt"]
-                if !FileManager.default.fileExists(atPath: checksumFile.path) {
-                    continue
-                }
                 let checksum = try String(contentsOf: checksumFile, encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines)
                 dependencyTargetContent += """
 
