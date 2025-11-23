@@ -24,7 +24,7 @@ let package = Package(
         .binaryTarget(
             name: "Libwhisper-combined",
             url: "https://github.com/mpvkit/whisper-build/releases/download/1.8.2/Libwhisper-combined.xcframework.zip",
-            checksum: "3f5bd7d100c8a9c7f68dec3642b1f63e82dda9d2942dc82dd33eee295fded947"
+            checksum: "1126055d2d494e3763290ec7c09c924823511269dd86877764b0a1b5520160d0"
         ),
         //AUTO_GENERATE_TARGETS_END//
     ]
